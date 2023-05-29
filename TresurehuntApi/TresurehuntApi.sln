@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33403.182
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TresurehuntApi", "TresurehuntApi.csproj", "{8337CF4F-4B4D-4CF4-8A79-B29FC71B504D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8337CF4F-4B4D-4CF4-8A79-B29FC71B504D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8337CF4F-4B4D-4CF4-8A79-B29FC71B504D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8337CF4F-4B4D-4CF4-8A79-B29FC71B504D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8337CF4F-4B4D-4CF4-8A79-B29FC71B504D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {20D1DCA6-02A4-4CA9-879E-7D11DBFC8447}
+	EndGlobalSection
+EndGlobal
