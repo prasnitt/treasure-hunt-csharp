@@ -1,4 +1,4 @@
-namespace TresurehuntApi
+namespace TreasurehuntApi
 {
     public class WeatherForecast
     {

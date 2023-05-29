@@ -1,6 +1,6 @@
-﻿using TresurehuntApi.Model;
+﻿using TreasurehuntApi.Model;
 
-namespace TresurehuntApi.Data
+namespace TreasurehuntApi.Data
 {
     public static class UserData
     {

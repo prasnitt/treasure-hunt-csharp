@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using TresurehuntApi.Data;
-using TresurehuntApi.lib;
-using TresurehuntApi.Model;
+using TreasurehuntApi.Data;
+using TreasurehuntApi.lib;
+using TreasurehuntApi.Model;
 
-namespace TresurehuntApi.Controllers
+namespace TreasurehuntApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]

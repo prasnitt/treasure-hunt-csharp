@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "TresurehuntApi": {
+    "TreasurehuntApi": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
