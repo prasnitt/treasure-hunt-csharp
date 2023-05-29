@@ -19,7 +19,8 @@ namespace TreasurehuntApi.Controllers
             _logger = logger;
         }
 
-        [HttpPost(Name = "login")]
+        [HttpPost]
+        [Route("login")]
         [SwaggerResponse(StatusCodes.Status200OK, "Returns 200 found the user", typeof(User))]
         public IActionResult Login(UserLoginRequest request)
         {
@@ -30,7 +31,7 @@ namespace TreasurehuntApi.Controllers
         }
 
 
-        [HttpGet(Name = "get")]
+        [HttpGet]
         [SwaggerResponse(StatusCodes.Status200OK, "If user is logged in", typeof(User))]
         public IActionResult Get()
         {
