@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using TresurehuntApi.Data;
-using TresurehuntApi.Model;
+using TreasurehuntApi.Data;
+using TreasurehuntApi.Model;
 
-namespace TresurehuntApi.Controllers
+namespace TreasurehuntApi.Controllers
 {
     public class BaseController : ControllerBase
     {

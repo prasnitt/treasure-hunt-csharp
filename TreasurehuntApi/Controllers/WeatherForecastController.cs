@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace TresurehuntApi.Controllers
+namespace TreasurehuntApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]

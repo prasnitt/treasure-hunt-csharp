@@ -1,4 +1,4 @@
-﻿namespace TresurehuntApi.Model
+﻿namespace TreasurehuntApi.Model
 {
     public class User
     {

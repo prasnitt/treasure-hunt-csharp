@@ -1,7 +1,7 @@
-﻿using TresurehuntApi.Data;
-using TresurehuntApi.Model;
+﻿using TreasurehuntApi.Data;
+using TreasurehuntApi.Model;
 
-namespace TresurehuntApi.lib
+namespace TreasurehuntApi.lib
 {
     public static class AuthLib
     {
