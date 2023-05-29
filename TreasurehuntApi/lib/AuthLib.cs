@@ -8,9 +8,13 @@ namespace TreasurehuntApi.lib
         public static string LoginCookie = "UserId";
         public static TimeSpan MaxLoggingTime = TimeSpan.FromMinutes(120);
 
-        public static void SetCookie(HttpResponse response, string userId)
+        public static void SetCookie(HttpResponse response, string userId, int maxUserSessionInMinutes = 0)
         {
-            response.Cookies.Append(LoginCookie, userId, new CookieOptions { Expires = DateTimeOffset.Now.Add(MaxLoggingTime) });
+            var timeSpan = MaxLoggingTime;
+            if (maxUserSessionInMinutes != 0)
+                timeSpan = TimeSpan.FromMinutes(maxUserSessionInMinutes);
+
+            response.Cookies.Append(LoginCookie, userId, new CookieOptions { Expires = DateTimeOffset.Now.Add(timeSpan) });
         }
 
         public static User? GetLoggedInUser(HttpRequest request)
