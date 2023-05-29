@@ -1,19 +1,20 @@
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using TresurehuntApi.Data;
+using TresurehuntApi.lib;
 using TresurehuntApi.Model;
 
 namespace TresurehuntApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class AuthController : ControllerBase
+    public class AuthController : BaseController
     {
-        
+        public const string LoginCookie = "UserId";
 
         private readonly ILogger<AuthController> _logger;
 
-        public AuthController(ILogger<AuthController> logger)
+        public AuthController(ILogger<AuthController> logger) : base(logger) 
         {
             _logger = logger;
         }
@@ -23,7 +24,19 @@ namespace TresurehuntApi.Controllers
         public IActionResult Login(UserLoginRequest request)
         {
             var user = UserData.ValidateUser(request);
-            return user == null ? Unauthorized() : Ok(user);
+            if (user == null) { return Unauthorized(); }
+            AuthLib.SetCookie(Response, user.Id.ToString());
+            return Ok(user);
+        }
+
+
+        [HttpGet(Name = "get")]
+        [SwaggerResponse(StatusCodes.Status200OK, "If user is logged in", typeof(User))]
+        public IActionResult Get()
+        {
+            var user = AuthLib.GetLoggedInUser(Request);
+            if (user == null) { return Unauthorized(); }
+            return Ok(user);
         }
     }
 }

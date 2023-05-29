@@ -16,6 +16,7 @@ namespace TresurehuntApi.Data
         {
             new User{
                 FullName = "Prashant",
+                Id = Guid.NewGuid(),
 
                 Username = "prasnitt",
                 Password = "Test123",
@@ -24,7 +25,7 @@ namespace TresurehuntApi.Data
 
             new User{
                 FullName = "Team A",
-
+                Id = Guid.NewGuid(),
                 Username = "teama",
                 Password = "testA",
                 Role = UserRoles.TeamA,
@@ -32,7 +33,7 @@ namespace TresurehuntApi.Data
 
             new User{
                 FullName = "Team B",
-
+                Id = Guid.NewGuid(),
                 Username = "teamb",
                 Password = "testB",
                 Role = UserRoles.TeamB,
@@ -44,6 +45,11 @@ namespace TresurehuntApi.Data
         public static User? ValidateUser(UserLoginRequest request)
         {
             return API_USERS.FirstOrDefault(u => u.Username == request.Username && u.Password == request.Password);
+        }
+
+        public static User? UserById(string userId)
+        {
+            return API_USERS.FirstOrDefault(u => u.Id.ToString() == userId);
         }
     }
 }
