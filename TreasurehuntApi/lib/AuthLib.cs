@@ -17,12 +17,18 @@ namespace TreasurehuntApi.lib
             response.Cookies.Append(LoginCookie, userId, new CookieOptions { Expires = DateTimeOffset.Now.Add(timeSpan) });
         }
 
-        public static User? GetLoggedInUser(HttpRequest request)
+        public static User? GetLoggedInUser(HttpRequest request, string expectedRole = null)
         {
-
             if (request.Cookies.TryGetValue(LoginCookie, out string userId))
             {
-                return UserData.UserById(userId);
+                var user =  UserData.UserById(userId);
+
+                if (user != null && expectedRole != null && user.Role != expectedRole)
+                {
+                    return null;
+                }
+
+                return user;
             }
 
             return null;
