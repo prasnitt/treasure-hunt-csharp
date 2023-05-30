@@ -10,6 +10,11 @@ namespace TreasurehuntApi.Model
 
         public int CurCheckPointNum { get; set; }
 
+        public TeamWiseGameStateDto() 
+        {
+            CurrentScore = 20;
+        }
+
     }
 
     public class GameStateDto
