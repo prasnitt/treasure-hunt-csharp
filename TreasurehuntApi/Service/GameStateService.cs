@@ -35,12 +35,12 @@ namespace TreasurehuntApi.Service
             return (GameStateDto)_inMemoryDataService.GetItemFromCache(InMemoryDataService.GameStateKey);
         }
 
-        public SingleGameFormatDto GetCurrentGameData(GameStateDto state = null)
+        public SingleGameFormatDto? GetCurrentGameData(GameStateDto state = null)
         {
             if (state == null) { state = GetCurrentGameState(); }
             if (state == null) { return null; }
 
-            return _gameDataService.GetGameDataByName(state.GameName);
+            return _gameDataService.GetGameDataByCode(state.GameCode);
         }
 
         public GameStateDto SelectNewGame(SingleGameFormatDto gameData)
@@ -51,10 +51,8 @@ namespace TreasurehuntApi.Service
             return gameState;
         }
 
-        public (int, string?) GetNextExpectedCode(string teamName, GameStateDto state)
+        public (int, string?) GetNextExpectedCode(string teamName, GameStateDto state, SingleGameFormatDto gameData)
         {
-            var gameData = GetCurrentGameData(state);
-
             if (gameData == null) { return (-1, "Game not started"); }
 
             if (!state.TeamWiseGameState.ContainsKey(teamName))

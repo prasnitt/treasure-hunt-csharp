@@ -8,6 +8,9 @@ namespace TreasurehuntApi.Model
         public string Description { get; set; }
         public string Name { get; set; }
 
+        // Use to identify the game (It's one character long)
+        public string Code { get; set; }
+
         // This is CSV data
         public List<string> DataHeaders { get; set; }
 

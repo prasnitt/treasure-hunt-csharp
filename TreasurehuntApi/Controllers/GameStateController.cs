@@ -41,18 +41,18 @@ namespace TreasurehuntApi.Controllers
 
 
         [HttpPost]
-        [Route("SetNewGame/{gameName}")]
+        [Route("SetNewGame/{gameCode}")]
         [SwaggerResponse(StatusCodes.Status200OK, "Get State", typeof(GameStateDto))]
-        public IActionResult SetNewGame([FromRoute] string gameName)
+        public IActionResult SetNewGame([FromRoute] string gameCode)
         {
             var user = AuthLib.GetLoggedInUser(Request, UserRoles.SuperAdmin);
             if (user == null) { return Unauthorized(); }
 
-            var curGame = _gameDataService.GetGameDataByName(gameName);
+            var curGame = _gameDataService.GetGameDataByCode(gameCode);
 
             if (curGame == null)
             {
-                return NotFound($"Game : `{gameName}` not found");
+                return NotFound($"GameCode : `{gameCode}` not found");
             }
 
             // Select new Game

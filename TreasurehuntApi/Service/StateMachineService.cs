@@ -10,6 +10,7 @@ namespace TreasurehuntApi.Service
 
         private static int CorrectCodePoint = 10;
         private static int InCorrectCodePoint = -1;
+        private static int InCorrectGameCodePoint = -2;
         private static int WinningEarlyBonusPoint = 2;
 
         public StateMachineService(ILogger<GameStateService> logger,
@@ -30,9 +31,10 @@ namespace TreasurehuntApi.Service
         //         1.a. If the last code within 2 minutes. No update
         //         1.b. Else -1
         //      2. Keep for same state
-        public (GameStateDto, string?) Run(string teamName, int scanCode)
+        public (GameStateDto, string?) Run(string teamName,string gameCode, int scanCode)
         {
             var state = _gameStateService.GetCurrentGameState();
+            var gameData = _gameStateService.GetCurrentGameData(state);
 
             var teamState = state.TeamWiseGameState[teamName];
 
@@ -42,23 +44,23 @@ namespace TreasurehuntApi.Service
                 return (state, null);
             }
 
-
             // Scan code will be a decimal number
-            var (expectedCode, error) = _gameStateService.GetNextExpectedCode(teamName, state);
+            var (expectedCode, error) = _gameStateService.GetNextExpectedCode(teamName, state, gameData);
 
             if (error != null)
             {
                 return (null, error);
             }
-            
 
-            if (expectedCode == scanCode)
+            bool isGameCodeMatch = (gameData.Code == gameCode);
+
+            if (expectedCode == scanCode && isGameCodeMatch)
             {
                 state = UpdateStateOnSuccessfulCodeMatch(teamName, state);
             }
             else
             {
-                state = UpdateStateOnFulureCodeNotMatch(teamName, state);
+                state = UpdateStateOnFulureCodeNotMatch(teamName, state, isGameCodeMatch);
             }
 
             // Update the state
@@ -68,11 +70,18 @@ namespace TreasurehuntApi.Service
 
         }
 
-        private GameStateDto UpdateStateOnFulureCodeNotMatch(string teamName, GameStateDto state)
+        private GameStateDto UpdateStateOnFulureCodeNotMatch(string teamName, GameStateDto state, bool isGameCodeMatch)
         {
             var teamState = state.TeamWiseGameState[teamName];
-            // Penalty point
-            teamState.CurrentScore += InCorrectCodePoint;
+            // Penalty points
+            if (isGameCodeMatch)
+            {
+                teamState.CurrentScore += InCorrectCodePoint;
+            }
+            else
+            {
+                teamState.CurrentScore += InCorrectGameCodePoint;
+            }
 
             return state;
         }

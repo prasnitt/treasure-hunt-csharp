@@ -21,15 +21,15 @@ namespace TreasurehuntApi.Controllers
         }
 
         [HttpGet]
-        [Route("{code}")]
+        [Route("{gameCode}/{scannedCode}")]
         [SwaggerResponse(StatusCodes.Status200OK, "If checkpoint has found", typeof(User))]
-        public IActionResult Get([FromRoute]int code)
+        public IActionResult Get([FromRoute] string gameCode, [FromRoute]int scannedCode)
         {
             var user = AuthLib.GetLoggedInUser(Request, UserRoles.Team);
             if (user == null) { return Unauthorized(); }
 
             // Run the state machine
-            var (state, error) = _stateMachineService.Run(user.FullName, code);
+            var (state, error) = _stateMachineService.Run(user.FullName, gameCode, scannedCode);
             if (error != null)
             {
                 return StatusCode(500, $"Internal Server Error: `{error}`");

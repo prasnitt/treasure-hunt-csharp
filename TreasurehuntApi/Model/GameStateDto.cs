@@ -23,6 +23,7 @@ namespace TreasurehuntApi.Model
         public Guid GameDataId { get; set; }
 
         public string GameName { get; set; }
+        public string GameCode { get; set; }
 
         public DateTimeOffset StartedAt { get; set; }
 
@@ -39,6 +40,7 @@ namespace TreasurehuntApi.Model
 
             GameDataId = gameData.Id;
             GameName = gameData.Name;
+            GameCode = gameData.Code;
             StartedAt = DateTimeOffset.UtcNow;
             TotalNumberOfCheckPoints = gameData.Data.Count;
 
