@@ -4,6 +4,9 @@ using TreasurehuntApi.Data;
 using TreasurehuntApi.lib;
 using TreasurehuntApi.Model;
 
+using System.IO;
+using Newtonsoft.Json;
+
 namespace TreasurehuntApi.Controllers
 {
     [ApiController]
@@ -46,11 +49,28 @@ namespace TreasurehuntApi.Controllers
 
         [HttpGet]
         [Route("testconfig")]
-        [SwaggerResponse(StatusCodes.Status200OK, "If user is logged in", typeof(User))]
+        [SwaggerResponse(StatusCodes.Status200OK, "Check if configuration are working", typeof(User))]
         public IActionResult TestConfig()
         {
             var maxUserSessionInMinutes = Configuration.GetValue<int>("auth:maxUserSessionInMinutes");
             return Ok(maxUserSessionInMinutes);
+        }
+
+        [HttpGet]
+        [Route("version")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Get version", typeof(string))]
+        public IActionResult GetVersion()
+        {
+
+            string jsonContent = System.IO.File.ReadAllText("autoversion.json");
+
+            // Parse the JSON content
+            dynamic jsonObject = JsonConvert.DeserializeObject(jsonContent);
+
+            // Access specific properties in the JSON object
+            string version = jsonObject.Version;
+
+            return Ok(version);
         }
     }
 }
