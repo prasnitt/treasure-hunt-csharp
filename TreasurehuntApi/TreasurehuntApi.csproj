@@ -7,8 +7,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.5.0" />
   </ItemGroup>
+
+	<Target Name="BeforeBuildAutoversion" BeforeTargets="PreBuildEvent">
+		<Message Text="Running autoversion.sh" />
+		<Exec Command="./autoversion.sh" Condition=" '$(OS)' != 'Windows_NT' " />
+		<Exec Command="autoversion.sh" Condition=" '$(OS)' == 'Windows_NT' " />
+	</Target>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<ItemGroup>
+			<ResourcesToCopy Include="$(ProjectDir)autoversion.json" />
+		</ItemGroup>
+		<Copy SourceFiles="@(ResourcesToCopy)" DestinationFolder="$(TargetDir)" />
+	</Target>
 
 </Project>
