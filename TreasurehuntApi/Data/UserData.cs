@@ -4,14 +4,17 @@ namespace TreasurehuntApi.Data
 {
     public static class UserData
     {
+        // Note this must be unique
+        public const string teamAName = "Team A";
+        public const string teamBName = "Team B";
+
+
         public static class UserRoles
         {
             public const string SuperAdmin = "SuperAdmin";
-
             public const string Team = "Team";
-            
-
         }
+
         static private List<User> API_USERS = new List<User>()
         {
             new User{
@@ -24,7 +27,7 @@ namespace TreasurehuntApi.Data
             },
 
             new User{
-                FullName = "Team A",
+                FullName = teamAName,
                 Id = Guid.NewGuid(),
                 Username = "teama",
                 Password = "testA",
@@ -32,7 +35,7 @@ namespace TreasurehuntApi.Data
             },
 
             new User{
-                FullName = "Team B",
+                FullName = teamBName,
                 Id = Guid.NewGuid(),
                 Username = "teamb",
                 Password = "testB",

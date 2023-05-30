@@ -13,13 +13,11 @@ namespace TreasurehuntApi.Controllers
     {
         private readonly GameDataService _gameDataService;
         private readonly ILogger<GameDataController> _logger;
-        private readonly InMemoryDataService _inMemoryDataService;
 
-        public GameDataController(ILogger<GameDataController> logger, GameDataService gameDataService, InMemoryDataService inMemoryDataService) : base(logger) 
+        public GameDataController(ILogger<GameDataController> logger, GameDataService gameDataService) : base(logger) 
         {
             _logger = logger;
             _gameDataService = gameDataService;
-            _inMemoryDataService = inMemoryDataService;
         }
 
         [HttpGet]
@@ -46,7 +44,7 @@ namespace TreasurehuntApi.Controllers
 
             if (user == null) { return Unauthorized(); }
 
-            var gameData = (GameDataDto)_inMemoryDataService.GetItemFromCache(InMemoryDataService.GameDataKey);
+            var gameData = _gameDataService.GetGameData();
 
             return Ok(gameData);
             ;

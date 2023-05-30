@@ -36,6 +36,22 @@ namespace TreasurehuntApi.Service
             return gameData;
         }
 
+        public GameDataDto GetGameData()
+        {
+            var gameData = (GameDataDto)_inMemoryDataService.GetItemFromCache(InMemoryDataService.GameDataKey);
+            return gameData;
+        }
+
+        public SingleGameFormatDto GetGameDataByName(string name)
+        {
+            var gameData = GetGameData();
+            if (gameData == null) { return null; }
+
+            var game = gameData.AllGames.FirstOrDefault(g => g.Name == name);
+
+            return game;
+        }
+
         private SingleGameFormatDto loadOneGameData(string spreadsheetId, string sheetId, string gameName)
         {
             var singleGameData = new SingleGameFormatDto()

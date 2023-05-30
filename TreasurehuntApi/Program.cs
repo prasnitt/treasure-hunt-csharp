@@ -33,4 +33,7 @@ void ConfigureServices(IServiceCollection services)
     
     services.AddSingleton<InMemoryDataService>();
     services.AddSingleton<GameDataService>();
+    services.AddSingleton<GameStateService>();
+    
+    services.AddHostedService<StartStopService>();
 }
