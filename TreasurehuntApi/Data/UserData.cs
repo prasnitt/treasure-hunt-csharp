@@ -8,8 +8,8 @@ namespace TreasurehuntApi.Data
         {
             public const string SuperAdmin = "SuperAdmin";
 
-            public const string TeamA = "TeamA";
-            public const string TeamB = "TeamB";
+            public const string Team = "Team";
+            
 
         }
         static private List<User> API_USERS = new List<User>()
@@ -28,7 +28,7 @@ namespace TreasurehuntApi.Data
                 Id = Guid.NewGuid(),
                 Username = "teama",
                 Password = "testA",
-                Role = UserRoles.TeamA,
+                Role = UserRoles.Team,
             },
 
             new User{
@@ -36,7 +36,7 @@ namespace TreasurehuntApi.Data
                 Id = Guid.NewGuid(),
                 Username = "teamb",
                 Password = "testB",
-                Role = UserRoles.TeamB,
+                Role = UserRoles.Team,
             }
 
         };

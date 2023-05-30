@@ -13,10 +13,12 @@ namespace TreasurehuntApi.Controllers
         public const string LoginCookie = "UserId";
 
         private readonly ILogger<AuthController> _logger;
+        private readonly IConfiguration Configuration;
 
-        public AuthController(ILogger<AuthController> logger) : base(logger) 
+        public AuthController(ILogger<AuthController> logger, IConfiguration configuration) : base(logger) 
         {
             _logger = logger;
+            Configuration = configuration;
         }
 
         [HttpPost]
@@ -24,9 +26,11 @@ namespace TreasurehuntApi.Controllers
         [SwaggerResponse(StatusCodes.Status200OK, "Returns 200 found the user", typeof(User))]
         public IActionResult Login(UserLoginRequest request)
         {
+            var maxUserSessionInMinutes = Configuration.GetValue<int>("auth:maxUserSessionInMinutes");
+
             var user = UserData.ValidateUser(request);
             if (user == null) { return Unauthorized(); }
-            AuthLib.SetCookie(Response, user.Id.ToString());
+            AuthLib.SetCookie(Response, user.Id.ToString(), maxUserSessionInMinutes);
             return Ok(user);
         }
 
@@ -38,6 +42,15 @@ namespace TreasurehuntApi.Controllers
             var user = AuthLib.GetLoggedInUser(Request);
             if (user == null) { return Unauthorized(); }
             return Ok(user);
+        }
+
+        [HttpGet]
+        [Route("testconfig")]
+        [SwaggerResponse(StatusCodes.Status200OK, "If user is logged in", typeof(User))]
+        public IActionResult TestConfig()
+        {
+            var maxUserSessionInMinutes = Configuration.GetValue<int>("auth:maxUserSessionInMinutes");
+            return Ok(maxUserSessionInMinutes);
         }
     }
 }
