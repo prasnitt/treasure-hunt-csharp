@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using TreasurehuntApi.lib;
 using TreasurehuntApi.Model;
+using TreasurehuntApi.Service;
+using static TreasurehuntApi.Data.UserData;
 
 namespace TreasurehuntApi.Controllers
 {
@@ -10,23 +12,41 @@ namespace TreasurehuntApi.Controllers
     public class CheckPointsController : BaseController
     {
         private readonly ILogger<CheckPointsController> _logger;
+        private readonly StateMachineService _stateMachineService;
 
-        public CheckPointsController(ILogger<CheckPointsController> logger) : base(logger) 
+        public CheckPointsController(ILogger<CheckPointsController> logger, StateMachineService stateMachineService) : base(logger) 
         {
             _logger = logger;
+            _stateMachineService = stateMachineService;
         }
 
         [HttpGet]
         [Route("{code}")]
         [SwaggerResponse(StatusCodes.Status200OK, "If checkpoint has found", typeof(User))]
-        public IActionResult Get([FromRoute]string code)
+        public IActionResult Get([FromRoute]int code)
         {
-            var user = AuthLib.GetLoggedInUser(Request);
+            var user = AuthLib.GetLoggedInUser(Request, UserRoles.Team);
             if (user == null) { return Unauthorized(); }
 
-            // TODO validate 
-            return Redirect("https://drive.google.com/file/d/1uCbt4cRdRsBuu_TsmHWWGstt9RTrCcKe/view");
-;
+            // Run the state machine
+            var (state, error) = _stateMachineService.Run(user.FullName, code);
+            if (error != null)
+            {
+                return StatusCode(500, $"Internal Server Error: `{error}`");
+            }
+
+            // TODO Check if match or mismatch
+
+            // TODO check if Game is over
+
+            // TODO check if this user has finished
+
+            // TODO get next url to divert
+
+            //return Redirect("https://drive.google.com/file/d/1uCbt4cRdRsBuu_TsmHWWGstt9RTrCcKe/view");
+
+            return Ok();
+
         }
     }
 }

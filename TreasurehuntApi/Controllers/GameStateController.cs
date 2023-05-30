@@ -33,7 +33,7 @@ namespace TreasurehuntApi.Controllers
 
             if (gameState == null)
             {
-                return NotFound($"has not started");
+                return NotFound($"Game has not started");
             }
 
             return Ok(gameState);

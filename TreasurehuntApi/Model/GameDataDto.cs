@@ -1,4 +1,6 @@
-﻿namespace TreasurehuntApi.Model
+﻿using TreasurehuntApi.Data;
+
+namespace TreasurehuntApi.Model
 {
     public class SingleGameFormatDto
     {
@@ -26,6 +28,18 @@
         public GameDataDto()
         {
             AllGames = new List<SingleGameFormatDto>();
+        }
+
+        // Code Index for teamA at 0th column, and 2nd column for teamB
+        public static int CodeIndexInRow(string teamName)
+        {
+            return (UserData.TeamAName == teamName) ? 0 : 2;
+        }
+
+        // InstructionUrl Index for teamA at 0th column, and 2nd column for teamB
+        public static int InstructionsUrlIndexInRow(string teamName)
+        {
+            return (UserData.TeamAName == teamName) ? 1 : 3;
         }
     }
 }
