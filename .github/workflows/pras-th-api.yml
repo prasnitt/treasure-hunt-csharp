@@ -2,13 +2,14 @@ name: Build and deploy .NET Core application to Web App pras-th-api
 on:
   push:
     branches:
-    - main
+    # TODO
+    - 13_cicd
 env:
   AZURE_WEBAPP_NAME: pras-th-api
   AZURE_WEBAPP_PACKAGE_PATH: ./publish
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 6.0.x
-  WORKING_DIRECTORY: .
+  WORKING_DIRECTORY: ./TreasurehuntApi
 jobs:
   build:
     runs-on: ubuntu-latest
