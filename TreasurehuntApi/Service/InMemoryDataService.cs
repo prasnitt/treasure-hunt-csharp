@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.Caching.Memory;
-
+using TreasurehuntApi.Model;
 
 namespace TreasurehuntApi.Service
 {
@@ -9,6 +9,7 @@ namespace TreasurehuntApi.Service
         private readonly IMemoryCache cache;
 
         public static string GameDataKey = "GameDataKey";
+        public static string GameStateKey = "GameStateKey";
 
         public InMemoryDataService(IMemoryCache memoryCache)
         {

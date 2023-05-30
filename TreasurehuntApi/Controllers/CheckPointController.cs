@@ -9,8 +9,6 @@ namespace TreasurehuntApi.Controllers
     [Route("[controller]")]
     public class CheckPointsController : BaseController
     {
-        public const string LoginCookie = "UserId";
-
         private readonly ILogger<CheckPointsController> _logger;
 
         public CheckPointsController(ILogger<CheckPointsController> logger) : base(logger) 
@@ -19,9 +17,9 @@ namespace TreasurehuntApi.Controllers
         }
 
         [HttpGet]
-        [Route("Get")]
+        [Route("{code}")]
         [SwaggerResponse(StatusCodes.Status200OK, "If checkpoint has found", typeof(User))]
-        public IActionResult Get([FromQuery]string code)
+        public IActionResult Get([FromRoute]string code)
         {
             var user = AuthLib.GetLoggedInUser(Request);
             if (user == null) { return Unauthorized(); }
