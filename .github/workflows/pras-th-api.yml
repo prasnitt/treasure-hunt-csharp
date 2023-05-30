@@ -10,6 +10,7 @@ env:
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 6.0.x
   WORKING_DIRECTORY: ./TreasurehuntApi
+  ENV_BUILD_ID: ${{github.run_number}}
 jobs:
   build:
     runs-on: ubuntu-latest
