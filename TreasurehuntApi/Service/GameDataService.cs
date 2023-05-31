@@ -26,9 +26,9 @@ namespace TreasurehuntApi.Service
 
             var gameData = new GameDataDto();
 
-            gameData.AllGames.Add(loadOneGameData(spredSheetId, demoSheetId, "Demo"));
-            gameData.AllGames.Add(loadOneGameData(spredSheetId, mediumSheetId, "Medium"));
-            gameData.AllGames.Add(loadOneGameData(spredSheetId, hardSheetId, "Hard"));
+            gameData.AllGames.Add(loadOneGameData(spredSheetId, demoSheetId, "Demo", "D"));
+            gameData.AllGames.Add(loadOneGameData(spredSheetId, mediumSheetId, "Easy", "M"));
+            gameData.AllGames.Add(loadOneGameData(spredSheetId, hardSheetId, "Expert", "H"));
 
 
             _inMemoryDataService.AddItemToCache(InMemoryDataService.GameDataKey, gameData);
@@ -42,21 +42,21 @@ namespace TreasurehuntApi.Service
             return gameData;
         }
 
-        public SingleGameFormatDto GetGameDataByName(string name)
+        public SingleGameFormatDto? GetGameDataByCode(string code)
         {
             var gameData = GetGameData();
             if (gameData == null) { return null; }
 
-            var game = gameData.AllGames.FirstOrDefault(g => g.Name == name);
-
+            var game = gameData.AllGames.FirstOrDefault(g => g.Code == code);
             return game;
         }
 
-        private SingleGameFormatDto loadOneGameData(string spreadsheetId, string sheetId, string gameName)
+        private SingleGameFormatDto loadOneGameData(string spreadsheetId, string sheetId, string gameName, string code)
         {
             var singleGameData = new SingleGameFormatDto()
             {
                 Name = gameName,
+                Code = code,
                 Id = Guid.NewGuid(),
             };
 
