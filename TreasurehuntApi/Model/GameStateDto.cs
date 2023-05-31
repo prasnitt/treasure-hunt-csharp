@@ -22,6 +22,8 @@ namespace TreasurehuntApi.Model
         public Guid Id { get; set; }
         public Guid GameDataId { get; set; }
 
+        public DateTimeOffset UpdatedAt { get; set; }
+
         public string GameName { get; set; }
         public string GameCode { get; set; }
 

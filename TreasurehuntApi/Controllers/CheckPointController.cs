@@ -29,22 +29,46 @@ namespace TreasurehuntApi.Controllers
             if (user == null) { return Unauthorized(); }
 
             // Run the state machine
-            var (state, error) = _stateMachineService.Run(user.FullName, gameCode, scannedCode);
-            if (error != null)
+            var stateRunResponse = _stateMachineService.Run(user.FullName, gameCode, scannedCode);
+            if (stateRunResponse.Error != null)
             {
-                return StatusCode(500, $"Internal Server Error: `{error}`");
+                return StatusCode(500, $"Internal Server Error: `{stateRunResponse.Error}`");
             }
 
+            // If game has not started
+            if (!stateRunResponse.IsGameStarted)
+            {
+                // TODO redirect to url
+                return StatusCode(400, $"Game has not started");
+            }
+
+            if (stateRunResponse.IsGameOver)
+            {
+                // TODO redirect to url
+                return StatusCode(200, $"Game has been finished");
+            }
+
+            // Current team has finished
+            if (stateRunResponse.IsCurrentTeamFinished)
+            {
+                // TODO redirect to url
+                return StatusCode(200, $"Current team finished");
+            }
+
+
             // TODO Check if match or mismatch
+            if (!stateRunResponse.IsSuccessfulScan)
+            {
+                // TODO redirect to url
+                return StatusCode(400, $"Invalid Scan");
+            }
 
-            // TODO check if Game is over
-
-            // TODO check if this user has finished
-
-            // TODO get next url to divert
-
-            //return Redirect("https://drive.google.com/file/d/1uCbt4cRdRsBuu_TsmHWWGstt9RTrCcKe/view");
-
+            // redirect to next instruction
+            if (stateRunResponse.UrlToRedirect != null)
+            {
+                return Redirect(stateRunResponse.UrlToRedirect);
+            }
+            
             return Ok();
 
         }

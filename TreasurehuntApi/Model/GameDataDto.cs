@@ -23,7 +23,20 @@ namespace TreasurehuntApi.Model
         }
     }
 
+    public class StateRunReturnDto
+    {
+        public bool IsGameStarted { get; set; }
 
+        public string? UrlToRedirect { get; set; }
+        public bool IsSuccessfulScan { get; set; }
+
+        public bool IsCurrentTeamFinished { get; set; }
+
+        // Is game finished by both the team
+        public bool IsGameOver { get; set; }
+
+        public string? Error { get; set; }
+    }
     public class GameDataDto
     {
         public List<SingleGameFormatDto> AllGames { get; set; }

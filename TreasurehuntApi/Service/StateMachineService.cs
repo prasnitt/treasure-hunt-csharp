@@ -31,25 +31,43 @@ namespace TreasurehuntApi.Service
         //         1.a. If the last code within 2 minutes. No update
         //         1.b. Else -1
         //      2. Keep for same state
-        public (GameStateDto, string?) Run(string teamName,string gameCode, int scanCode)
+        public StateRunReturnDto Run(string teamName,string gameCode, int scanCode)
         {
+            var ret = new StateRunReturnDto();
             var state = _gameStateService.GetCurrentGameState();
-            var gameData = _gameStateService.GetCurrentGameData(state);
+
+            if (state == null)
+            {
+                ret.IsGameStarted = false;
+                return ret;
+            }
+
+            ret.IsGameStarted = true;
+
+            // If Game has over, means both team are finised
+            if (state.IsGameOver)
+            {
+                ret.IsGameOver = true;
+                return ret;
+            }
 
             var teamState = state.TeamWiseGameState[teamName];
 
             // If team has already finished the game ignore anything
             if (teamState.FinishedAt != null)
             {
-                return (state, null);
+                ret.IsCurrentTeamFinished = true;
+                return ret;
             }
 
+            var gameData = _gameStateService.GetCurrentGameData(state);
             // Scan code will be a decimal number
             var (expectedCode, error) = _gameStateService.GetNextExpectedCode(teamName, state, gameData);
 
             if (error != null)
             {
-                return (null, error);
+                ret.Error = error;
+                return ret;
             }
 
             bool isGameCodeMatch = (gameData.Code == gameCode);
@@ -57,17 +75,29 @@ namespace TreasurehuntApi.Service
             if (expectedCode == scanCode && isGameCodeMatch)
             {
                 state = UpdateStateOnSuccessfulCodeMatch(teamName, state);
+                ret.IsSuccessfulScan = true;
+
+                // Check if team has finished
+                teamState = state.TeamWiseGameState[teamName];
+                if (teamState.FinishedAt != null)
+                {
+                    ret.IsCurrentTeamFinished = true;
+                } 
+                else // look for next url instruction
+                {
+                    (ret.UrlToRedirect, ret.Error) = _gameStateService.GetInstructionUrl(teamName, state, gameData);
+                }
             }
             else
             {
                 state = UpdateStateOnFulureCodeNotMatch(teamName, state, isGameCodeMatch);
+                ret.IsSuccessfulScan = false;
             }
 
             // Update the state
             _gameStateService.UpdateNewGameState(state);
 
-            return (state, null);
-
+            return ret;
         }
 
         private GameStateDto UpdateStateOnFulureCodeNotMatch(string teamName, GameStateDto state, bool isGameCodeMatch)
