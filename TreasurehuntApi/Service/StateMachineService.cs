@@ -11,7 +11,7 @@ namespace TreasurehuntApi.Service
         private static int CorrectCodePoint = 10;
         private static int InCorrectCodePoint = -1;
         private static int InCorrectGameCodePoint = -2;
-        private static int WinningEarlyBonusPoint = 2;
+        private static int WinningEarlyBonusPoint = 4;
 
         public StateMachineService(ILogger<GameStateService> logger,
             GameStateService gameStateService)
