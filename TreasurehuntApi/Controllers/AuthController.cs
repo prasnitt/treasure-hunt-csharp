@@ -58,7 +58,7 @@ namespace TreasurehuntApi.Controllers
             }
         }
 
-        private void setLoginCookie(User user)
+        private void setLoginCookie(UserResponseDto user)
         {
             var maxUserSessionInMinutes = Configuration.GetValue<int>("auth:maxUserSessionInMinutes");
             AuthLib.SetCookie(Response, user.Id.ToString(), maxUserSessionInMinutes);
@@ -66,7 +66,7 @@ namespace TreasurehuntApi.Controllers
 
         [HttpPost]
         [Route("login")]
-        [SwaggerResponse(StatusCodes.Status200OK, "Returns 200 found the user", typeof(User))]
+        [SwaggerResponse(StatusCodes.Status200OK, "Returns 200 found the user", typeof(string))]
         public IActionResult Login(UserLoginRequest request)
         {
             var user = UserData.ValidateUser(request);
@@ -79,7 +79,7 @@ namespace TreasurehuntApi.Controllers
 
         [HttpGet]
         [Route("fastLogin")]
-        [SwaggerResponse(StatusCodes.Status200OK, "Returns 200 found the user", typeof(User))]
+        [SwaggerResponse(StatusCodes.Status200OK, "Returns 200 found the user", typeof(UserResponseDto))]
         public IActionResult FastLogin([FromQuery] string loginEncodedString)
         {
             var request =  getDecodedRequest(loginEncodedString);
@@ -95,7 +95,7 @@ namespace TreasurehuntApi.Controllers
 
 
         [HttpGet]
-        [SwaggerResponse(StatusCodes.Status200OK, "If user is logged in", typeof(User))]
+        [SwaggerResponse(StatusCodes.Status200OK, "If user is logged in", typeof(UserResponseDto))]
         public IActionResult Get()
         {
             var user = AuthLib.GetLoggedInUser(Request);
