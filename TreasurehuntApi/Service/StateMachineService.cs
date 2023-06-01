@@ -106,11 +106,11 @@ namespace TreasurehuntApi.Service
             // Penalty points
             if (isGameCodeMatch)
             {
-                teamState.CurrentScore += InCorrectCodePoint;
+                AddToTeamScore(teamState, InCorrectCodePoint);
             }
             else
             {
-                teamState.CurrentScore += InCorrectGameCodePoint;
+                AddToTeamScore(teamState, InCorrectGameCodePoint);
             }
 
             return state;
@@ -121,12 +121,10 @@ namespace TreasurehuntApi.Service
             var teamState = state.TeamWiseGameState[teamName];
             var otherTeamState = state.TeamWiseGameState[GetOtherTeamName(teamName)];
 
-            // Increment CheckPoint & point
-            teamState.CurCheckPointNum++;
-            teamState.CurrentScore += CorrectCodePoint;
+            AddToTeamScore(teamState, CorrectCodePoint);
 
             // Check if at finished
-            if (teamState.CurCheckPointNum == state.TotalNumberOfCheckPoints)
+            if ((teamState.CurCheckPointIndex + 1) == state.TotalNumberOfCheckPoints)
             {
                 teamState.FinishedAt = DateTimeOffset.UtcNow;
 
@@ -138,15 +136,24 @@ namespace TreasurehuntApi.Service
                 // Give some more bonus point to current team if other team has not finished yet
                 else
                 {
-                    teamState.CurrentScore += WinningEarlyBonusPoint;
+                    AddToTeamScore(teamState, WinningEarlyBonusPoint);
                 }
             }
+
+            // Increment CheckPoint & point
+            teamState.CurCheckPointIndex++;
 
             state.TeamWiseGameState[teamName] = teamState;
             return state;
         }
 
-        
+        private void AddToTeamScore(TeamWiseGameStateDto teamState, int score)
+        {
+            teamState.ScoreTransaction[teamState.CurCheckPointIndex].Add(score);
+            teamState.CurrentScore += score;
+        }
+
+
         private string GetOtherTeamName(string teamName)
         {
             return (teamName == UserData.TeamAName) ? UserData.TeamBName : UserData.TeamAName;

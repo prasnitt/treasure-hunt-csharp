@@ -85,12 +85,12 @@ namespace TreasurehuntApi.Service
 
             var teamState = state.TeamWiseGameState[teamName];
 
-            if (gameData.Data.Count <= teamState.CurCheckPointNum)
+            if (gameData.Data.Count <= teamState.CurCheckPointIndex)
             {
-                return (null, $"For Team `{teamName}` Check point `{teamState.CurCheckPointNum}` bigger than expected `{gameData.Data.Count - 1}`");
+                return (null, $"For Team `{teamName}` Check point `{teamState.CurCheckPointIndex}` bigger than expected `{gameData.Data.Count - 1}`");
             }
 
-            var row = gameData.Data[teamState.CurCheckPointNum];
+            var row = gameData.Data[teamState.CurCheckPointIndex];
 
             int columnIndex;
             if (isCode)
