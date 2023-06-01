@@ -61,6 +61,13 @@ namespace TreasurehuntApi.Service
             }
 
             var gameData = _gameStateService.GetCurrentGameData(state);
+
+            if (gameData != null)
+            {
+                ret.Error = "Unable to get gameData";
+                return ret;
+            }
+
             // Scan code will be a decimal number
             var (expectedCode, error) = _gameStateService.GetNextExpectedCode(teamName, state, gameData);
 
@@ -70,7 +77,7 @@ namespace TreasurehuntApi.Service
                 return ret;
             }
 
-            bool isGameCodeMatch = (gameData.Code == gameCode);
+            bool isGameCodeMatch = (gameData?.Code == gameCode);
 
             if (expectedCode == scanCode && isGameCodeMatch)
             {

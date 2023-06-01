@@ -36,7 +36,7 @@ namespace TreasurehuntApi.Controllers
                 string base64Encoded = Convert.ToBase64String(bytes);
                 return base64Encoded;
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 return null;
             }
@@ -52,7 +52,7 @@ namespace TreasurehuntApi.Controllers
                 UserLoginRequest? request = JsonConvert.DeserializeObject<UserLoginRequest>(jsonString);
                 return request;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
@@ -121,10 +121,10 @@ namespace TreasurehuntApi.Controllers
             string jsonContent = System.IO.File.ReadAllText("autoversion.json");
 
             // Parse the JSON content
-            dynamic jsonObject = JsonConvert.DeserializeObject(jsonContent);
+            VersionDto? versionObj = JsonConvert.DeserializeObject<VersionDto>(jsonContent);
 
             // Access specific properties in the JSON object
-            string version = jsonObject.Version;
+            string? version = versionObj?.Version;
 
             return Ok(version);
         }

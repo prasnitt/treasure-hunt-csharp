@@ -16,10 +16,16 @@ namespace TreasurehuntApi.Model
 
         public List<string[]> Data { get; set; }
 
-        public SingleGameFormatDto() {
+        public SingleGameFormatDto(string name, string code) {
         
             Data = new List<string[]>();
             DataHeaders = new List<string>();
+            Name = name;
+            Code = code;
+            Id = Guid.NewGuid();
+
+            // TODO : add description for the game
+            Description = "";
         }
     }
 
