@@ -46,9 +46,9 @@ namespace TreasurehuntApi.Data
         };
 
 
-        public static UserResponseDto? ValidateUser(UserLoginRequest request)
+        public static UserResponseDto? GetUserResponse(User? user)
         {
-            var user =  API_USERS.FirstOrDefault(u => u.UserName == request.UserName && u.Password == request.Password);
+            if (user == null) return null;
 
             return new UserResponseDto
             {
@@ -57,6 +57,13 @@ namespace TreasurehuntApi.Data
                 FullName = user.FullName,
                 Role = user.Role,
             };
+        }
+
+
+        public static UserResponseDto? ValidateUser(UserLoginRequest request)
+        {
+            var user =  API_USERS.FirstOrDefault(u => u.UserName == request.UserName && u.Password == request.Password);
+            return GetUserResponse(user);
         }
 
         public static User? UserById(string? userId)

@@ -100,7 +100,7 @@ namespace TreasurehuntApi.Controllers
         {
             var user = AuthLib.GetLoggedInUser(Request);
             if (user == null) { return Unauthorized(); }
-            return Ok(user);
+            return Ok(UserData.GetUserResponse(user));
         }
 
         [HttpGet]
