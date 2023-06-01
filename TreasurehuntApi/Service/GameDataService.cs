@@ -53,12 +53,7 @@ namespace TreasurehuntApi.Service
 
         private SingleGameFormatDto loadOneGameData(string spreadsheetId, string sheetId, string gameName, string code)
         {
-            var singleGameData = new SingleGameFormatDto()
-            {
-                Name = gameName,
-                Code = code,
-                Id = Guid.NewGuid(),
-            };
+            var singleGameData = new SingleGameFormatDto(gameName, code);
 
             (singleGameData.DataHeaders, singleGameData.Data) = GoogleSpreadSheet.GetSheetAsCsvData(spreadsheetId, sheetId);
 

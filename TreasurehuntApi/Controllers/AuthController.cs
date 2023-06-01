@@ -6,6 +6,9 @@ using TreasurehuntApi.Model;
 
 using System.IO;
 using Newtonsoft.Json;
+using System;
+using static System.Net.Mime.MediaTypeNames;
+using System.Text;
 
 namespace TreasurehuntApi.Controllers
 {
@@ -24,16 +27,69 @@ namespace TreasurehuntApi.Controllers
             Configuration = configuration;
         }
 
+        private string? getEncodedLoginString(UserLoginRequest request)
+        {
+            try
+            {
+                string jsonString = JsonConvert.SerializeObject(request);
+                byte[] bytes = Encoding.UTF8.GetBytes(jsonString);
+                string base64Encoded = Convert.ToBase64String(bytes);
+                return base64Encoded;
+            }
+            catch(Exception)
+            {
+                return null;
+            }
+        }
+
+        private UserLoginRequest? getDecodedRequest(string encodedStrng)
+        {
+            try
+            {
+                byte[] base64Bytes = Convert.FromBase64String(encodedStrng);
+                string jsonString = Encoding.UTF8.GetString(base64Bytes);
+
+                UserLoginRequest? request = JsonConvert.DeserializeObject<UserLoginRequest>(jsonString);
+                return request;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        private void setLoginCookie(User user)
+        {
+            var maxUserSessionInMinutes = Configuration.GetValue<int>("auth:maxUserSessionInMinutes");
+            AuthLib.SetCookie(Response, user.Id.ToString(), maxUserSessionInMinutes);
+        }
+
         [HttpPost]
         [Route("login")]
         [SwaggerResponse(StatusCodes.Status200OK, "Returns 200 found the user", typeof(User))]
         public IActionResult Login(UserLoginRequest request)
         {
-            var maxUserSessionInMinutes = Configuration.GetValue<int>("auth:maxUserSessionInMinutes");
-
             var user = UserData.ValidateUser(request);
             if (user == null) { return Unauthorized(); }
-            AuthLib.SetCookie(Response, user.Id.ToString(), maxUserSessionInMinutes);
+
+            setLoginCookie(user);
+            // Generate Encoded string
+            return Ok(getEncodedLoginString(request));
+        }
+
+        [HttpGet]
+        [Route("fastLogin")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Returns 200 found the user", typeof(User))]
+        public IActionResult FastLogin([FromQuery] string loginEncodedString)
+        {
+            var request =  getDecodedRequest(loginEncodedString);
+            if(request == null) { return Unauthorized(); }
+            
+            var user = UserData.ValidateUser(request);
+            if (user == null) { return Unauthorized(); }
+
+            setLoginCookie(user);
+
             return Ok(user);
         }
 
@@ -65,10 +121,10 @@ namespace TreasurehuntApi.Controllers
             string jsonContent = System.IO.File.ReadAllText("autoversion.json");
 
             // Parse the JSON content
-            dynamic jsonObject = JsonConvert.DeserializeObject(jsonContent);
+            VersionDto? versionObj = JsonConvert.DeserializeObject<VersionDto>(jsonContent);
 
             // Access specific properties in the JSON object
-            string version = jsonObject.Version;
+            string? version = versionObj?.Version;
 
             return Ok(version);
         }
