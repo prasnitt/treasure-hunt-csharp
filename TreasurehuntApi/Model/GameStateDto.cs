@@ -2,17 +2,30 @@
 
 namespace TreasurehuntApi.Model
 {
+    
     public class TeamWiseGameStateDto
     {
+        const int startingScore = 20;
+
         public int CurrentScore { get; set; }
 
         public DateTimeOffset? FinishedAt { get; set; }
 
-        public int CurCheckPointNum { get; set; }
+        public int CurCheckPointIndex { get; set; }
 
-        public TeamWiseGameStateDto() 
+        public List<List<int>>  ScoreTransaction { get; set; }
+
+        public TeamWiseGameStateDto(int totalNumberOfCheckPoints) 
         {
-            CurrentScore = 20;
+            ScoreTransaction = new List<List<int>>();
+
+            for (int i = 0; i < totalNumberOfCheckPoints; i++)
+            {
+                ScoreTransaction.Add(new List<int>());
+            }
+
+            CurrentScore = startingScore;
+            ScoreTransaction[0].Add(CurrentScore);
         }
 
     }
@@ -48,8 +61,8 @@ namespace TreasurehuntApi.Model
 
             // Init team scores
             TeamWiseGameState = new Dictionary<String, TeamWiseGameStateDto>();
-            TeamWiseGameState[UserData.TeamAName] = new TeamWiseGameStateDto();
-            TeamWiseGameState[UserData.TeamBName] = new TeamWiseGameStateDto();
+            TeamWiseGameState[UserData.TeamAName] = new TeamWiseGameStateDto(TotalNumberOfCheckPoints);
+            TeamWiseGameState[UserData.TeamBName] = new TeamWiseGameStateDto(TotalNumberOfCheckPoints);
         }
     }
 }
