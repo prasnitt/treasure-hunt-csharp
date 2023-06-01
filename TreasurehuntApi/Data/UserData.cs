@@ -22,7 +22,7 @@ namespace TreasurehuntApi.Data
                 FullName = "Prashant",
                 Id = Guid.NewGuid(),
 
-                Username = "prasnitt",
+                UserName = "prasnitt",
                 Password = "Test123",
                 Role = UserRoles.SuperAdmin,
             },
@@ -30,7 +30,7 @@ namespace TreasurehuntApi.Data
             new User{
                 FullName = TeamAName,
                 Id = Guid.NewGuid(),
-                Username = "teama",
+                UserName = "teama",
                 Password = "testA",
                 Role = UserRoles.Team,
             },
@@ -38,7 +38,7 @@ namespace TreasurehuntApi.Data
             new User{
                 FullName = TeamBName,
                 Id = Guid.NewGuid(),
-                Username = "teamb",
+                UserName = "teamb",
                 Password = "testB",
                 Role = UserRoles.Team,
             }
@@ -48,10 +48,10 @@ namespace TreasurehuntApi.Data
 
         public static User? ValidateUser(UserLoginRequest request)
         {
-            return API_USERS.FirstOrDefault(u => u.Username == request.Username && u.Password == request.Password);
+            return API_USERS.FirstOrDefault(u => u.UserName == request.UserName && u.Password == request.Password);
         }
 
-        public static User? UserById(string userId)
+        public static User? UserById(string? userId)
         {
             return API_USERS.FirstOrDefault(u => u.Id.ToString() == userId);
         }
