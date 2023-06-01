@@ -1,5 +1,5 @@
 using TreasurehuntApi.Service;
-using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Cors;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +17,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+app.UseCors("AllowAnyDomain");
 
 app.Run();
 
@@ -37,4 +38,13 @@ void ConfigureServices(IServiceCollection services)
     services.AddSingleton<StateMachineService>();
 
     services.AddHostedService<StartStopService>();
+
+    services.AddCors(options =>
+    {
+        options.AddPolicy("AllowAnyDomain",
+            builder => builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
+    });
 }
