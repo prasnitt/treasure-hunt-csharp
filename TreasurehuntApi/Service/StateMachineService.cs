@@ -62,7 +62,7 @@ namespace TreasurehuntApi.Service
 
             var gameData = _gameStateService.GetCurrentGameData(state);
 
-            if (gameData != null)
+            if (gameData == null)
             {
                 ret.Error = "Unable to get gameData";
                 return ret;
@@ -77,7 +77,7 @@ namespace TreasurehuntApi.Service
                 return ret;
             }
 
-            bool isGameCodeMatch = (gameData?.Code == gameCode);
+            bool isGameCodeMatch = (gameData.Code == gameCode);
 
             if (expectedCode == scanCode && isGameCodeMatch)
             {
