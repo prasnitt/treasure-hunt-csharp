@@ -52,6 +52,7 @@ namespace TreasurehuntApi.Service
                     ImageToShow = "https://purple-glacier-016035500.3.azurestaticapps.net/assets/img/WrongQRCode.jpg",
                      Message = "Wrong QR Code Scan :(",
                      HTMLErrorCode = 400,
+                     UrlDivertTimeInMilliSeconds = 3000,
                 }
             },
             {

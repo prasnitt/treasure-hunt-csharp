@@ -52,10 +52,11 @@ namespace TreasurehuntApi.Controllers
                 return HtmlResponseGeneratorService.GetHtmlPage("FinishedGame");
             }
 
-            // TODO Check if match or mismatch
+            // if scan mismatch
             if (!stateRunResponse.IsSuccessfulScan)
             {
-                return HtmlResponseGeneratorService.GetHtmlPage("WrongScan");
+                return HtmlResponseGeneratorService.GetHtmlPage("WrongScan", 
+                    urlToDivert : stateRunResponse.UrlToRedirect);
             }
 
             // redirect to next instruction

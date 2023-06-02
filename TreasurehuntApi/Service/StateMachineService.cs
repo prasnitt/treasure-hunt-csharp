@@ -81,7 +81,7 @@ namespace TreasurehuntApi.Service
 
             if (expectedCode == scanCode && isGameCodeMatch)
             {
-                // Get Instructions for next checkpoint
+                // Get url Instructions for next checkpoint
                 (ret.UrlToRedirect, ret.Error) = _gameStateService.GetInstructionUrl(teamName, state, gameData);
 
                 state = UpdateStateOnSuccessfulCodeMatch(teamName, state);
@@ -97,6 +97,9 @@ namespace TreasurehuntApi.Service
             }
             else
             {
+                // Get previous url for instruction for previous checkpoint
+                (ret.UrlToRedirect, ret.Error) = _gameStateService.GetInstructionUrl(teamName, state, gameData, getPrevious: true);
+
                 state = UpdateStateOnFulureCodeNotMatch(teamName, state, isGameCodeMatch);
                 ret.IsSuccessfulScan = false;
             }
