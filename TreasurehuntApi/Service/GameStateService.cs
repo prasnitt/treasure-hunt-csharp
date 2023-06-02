@@ -68,13 +68,15 @@ namespace TreasurehuntApi.Service
         }
 
 
-        public (string?, string?) GetInstructionUrl(string teamName, GameStateDto state, SingleGameFormatDto? gameData)
+        public (string?, string?) GetInstructionUrl(string teamName, GameStateDto state, SingleGameFormatDto? gameData, 
+            bool getPrevious = false)
         {
-            var (url, error) = GetGameData(teamName, state, gameData, false);
+            var (url, error) = GetGameData(teamName, state, gameData, false, getPrevious);
             return (url, error);
         }
 
-        private (string?, string?) GetGameData(string teamName, GameStateDto state, SingleGameFormatDto? gameData, bool isCode)
+        private (string?, string?) GetGameData(string teamName, GameStateDto state, SingleGameFormatDto? gameData, bool isCode,
+            bool getPrevious = false)
         {
             if (gameData == null) { return (null, "Game not started"); }
 
@@ -87,10 +89,23 @@ namespace TreasurehuntApi.Service
 
             if (gameData.Data.Count <= teamState.CurCheckPointIndex)
             {
-                return (null, $"For Team `{teamName}` Check point `{teamState.CurCheckPointIndex}` bigger than expected `{gameData.Data.Count - 1}`");
+                return (null, null);
             }
 
-            var row = gameData.Data[teamState.CurCheckPointIndex];
+            int checkPointIndex = teamState.CurCheckPointIndex;
+            // Get previous checkpoint data
+            if (getPrevious)
+            {
+                if (checkPointIndex == 0)
+                {
+                    return (null, null);
+                }
+
+                // reduce the checkpoint value
+                checkPointIndex -= 1;
+            }
+
+            var row = gameData.Data[checkPointIndex];
 
             int columnIndex;
             if (isCode)
