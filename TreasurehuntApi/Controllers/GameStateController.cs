@@ -30,10 +30,9 @@ namespace TreasurehuntApi.Controllers
         public IActionResult Get()
         {
             var gameState = _gameStateService.GetCurrentGameState();
-
             if (gameState == null)
             {
-                return NotFound($"Game has not started");
+                gameState = new GameStateDto();
             }
 
             return Ok(gameState);
@@ -58,6 +57,18 @@ namespace TreasurehuntApi.Controllers
             // Select new Game
             var gameState = _gameStateService.SelectNewGame(curGame);
             return Ok(gameState);
+        }
+
+        [HttpPost]
+        [Route("reset")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Get State", typeof(GameStateDto))]
+        public IActionResult Reset()
+        {
+            var user = AuthLib.GetLoggedInUser(Request, UserRoles.SuperAdmin);
+            if (user == null) { return Unauthorized(); }
+
+            _gameStateService.ResetCurrentGameState();
+            return Ok();
         }
     }
 }

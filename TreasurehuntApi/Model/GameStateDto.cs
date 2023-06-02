@@ -40,7 +40,10 @@ namespace TreasurehuntApi.Model
         public string GameName { get; set; }
         public string GameCode { get; set; }
 
+        public bool IsGameStarted { get; set; }
+
         public DateTimeOffset StartedAt { get; set; }
+
 
         // If both team finished
         public bool IsGameOver { get; set; }
@@ -56,6 +59,7 @@ namespace TreasurehuntApi.Model
             GameDataId = gameData.Id;
             GameName = gameData.Name;
             GameCode = gameData.Code;
+            IsGameStarted = true;
             StartedAt = DateTimeOffset.UtcNow;
             TotalNumberOfCheckPoints = gameData.Data.Count;
 
@@ -63,6 +67,13 @@ namespace TreasurehuntApi.Model
             TeamWiseGameState = new Dictionary<String, TeamWiseGameStateDto>();
             TeamWiseGameState[UserData.TeamAName] = new TeamWiseGameStateDto(TotalNumberOfCheckPoints);
             TeamWiseGameState[UserData.TeamBName] = new TeamWiseGameStateDto(TotalNumberOfCheckPoints);
+        }
+
+        public GameStateDto()
+        {
+            TeamWiseGameState = new Dictionary<String, TeamWiseGameStateDto>();
+            TeamWiseGameState[UserData.TeamAName] = new TeamWiseGameStateDto(1);
+            TeamWiseGameState[UserData.TeamBName] = new TeamWiseGameStateDto(1);
         }
     }
 }
