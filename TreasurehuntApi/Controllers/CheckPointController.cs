@@ -22,51 +22,48 @@ namespace TreasurehuntApi.Controllers
 
         [HttpGet]
         [Route("{gameCode}/{scannedCode}")]
-        [SwaggerResponse(StatusCodes.Status200OK, "If checkpoint has found", typeof(User))]
+        [SwaggerResponse(StatusCodes.Status200OK, "If checkpoint is matched", typeof(ContentResult))]
         public IActionResult Get([FromRoute] string gameCode, [FromRoute]int scannedCode)
         {
             var user = AuthLib.GetLoggedInUser(Request, UserRoles.Team);
-            if (user == null) { return Unauthorized(); }
+            if (user == null) { return HtmlResponseGeneratorService.GetHtmlPage("Unauthorized"); }
 
             // Run the state machine
             var stateRunResponse = _stateMachineService.Run(user.FullName, gameCode, scannedCode);
             if (stateRunResponse.Error != null)
             {
-                return StatusCode(500, $"Internal Server Error: `{stateRunResponse.Error}`");
+                return HtmlResponseGeneratorService.GetHtmlPage("InternalServerError", stateRunResponse.Error);
             }
 
             // If game has not started
             if (!stateRunResponse.IsGameStarted)
             {
-                // TODO redirect to url
-                return StatusCode(400, $"Game has not started");
+                return HtmlResponseGeneratorService.GetHtmlPage("GameNotStarted", "Please Wait");
             }
 
             if (stateRunResponse.IsGameOver)
             {
-                // TODO redirect to url
-                return StatusCode(200, $"Game has been finished");
+                return HtmlResponseGeneratorService.GetHtmlPage("GameOver");
             }
 
             // Current team has finished
             if (stateRunResponse.IsCurrentTeamFinished)
             {
-                // TODO redirect to url
-                return StatusCode(200, $"Current team finished");
+                return HtmlResponseGeneratorService.GetHtmlPage("FinishedGame");
             }
-
 
             // TODO Check if match or mismatch
             if (!stateRunResponse.IsSuccessfulScan)
             {
-                // TODO redirect to url
-                return StatusCode(400, $"Invalid Scan");
+                return HtmlResponseGeneratorService.GetHtmlPage("WrongScan");
             }
 
             // redirect to next instruction
             if (stateRunResponse.UrlToRedirect != null)
             {
-                return Redirect(stateRunResponse.UrlToRedirect);
+                return HtmlResponseGeneratorService.GetHtmlPage("SuccessfulScan", 
+                    "You are going to see instruction for next Checkpoint",
+                    stateRunResponse.UrlToRedirect);
             }
             
             return Ok();
