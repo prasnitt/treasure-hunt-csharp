@@ -1,8 +1,4 @@
-﻿using Microsoft.Extensions.Hosting;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using TreasurehuntApi.Service;
+﻿using TreasurehuntApi.Service;
 
 public class StartStopService : IHostedService
 {
