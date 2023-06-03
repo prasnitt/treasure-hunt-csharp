@@ -53,13 +53,15 @@ namespace TreasurehuntApi.Controllers
         [HttpGet]
         [Route("pdfData")]
         [SwaggerResponse(StatusCodes.Status200OK, "Load all games data from in memory", typeof(QrCodePdf))]
-        public IActionResult GetPdfData([FromQuery] string gameCode, [FromQuery] int numberUntil)
+        public IActionResult GetPdfData([FromQuery] int extraCode = 1, [FromQuery] string? additionalGameCode = null, [FromQuery] int additionalNumber = 2)
         {
-            //var user = AuthLib.GetLoggedInUser(Request, UserRoles.SuperAdmin);
+            var user = AuthLib.GetLoggedInUser(Request, UserRoles.SuperAdmin);
 
-            //if (user == null) { return Unauthorized(); }
-            
-            var qrCodePdfData = QRCodeGeneratorService.GetQrCodesPdfData(gameCode, numberUntil);
+            if (user == null) { return Unauthorized(); }
+
+            var gameData = _gameDataService.GetGameData();
+
+            var qrCodePdfData = QRCodeGeneratorService.GetQrCodesPdfData(gameData, extraCode, additionalGameCode, additionalNumber);
 
             return Ok(qrCodePdfData);
             ;
