@@ -15,10 +15,13 @@ namespace TreasurehuntApi.Service
         public const int A4PageWidth = 210;
         public const int A4PageHeight = 297;
         
+        // It seems in real world everything need to be multiplied 4 times to take print
+        public const int RealWordlIncrementFactor = 4;
+        
 
         public static QrCodePdf GetQrCodesPdfData(string gameCode, int numberUntil)
         {
-              var stickerPdf = new QrCodeStickerPdfInputData()
+            var stickerPdf = new QrCodeStickerPdfInputData()
             {
                 // A4 sheet size
                 PageHeight = A4PageHeight,
@@ -26,9 +29,35 @@ namespace TreasurehuntApi.Service
             };
 
             (stickerPdf.PdfStrings, stickerPdf.QrCodes) = GetPdfData(gameCode, numberUntil);
+
+            considerRealWorldPrintoutFactor(stickerPdf);
+
             var qrCodePdf = new QrCodePdf() { StickerPdf = stickerPdf };
             return qrCodePdf;
         }
+
+        private static void considerRealWorldPrintoutFactor(QrCodeStickerPdfInputData stickerPdf)
+        {
+            stickerPdf.PageWidth *= RealWordlIncrementFactor;
+            stickerPdf.PageHeight *= RealWordlIncrementFactor;
+
+            foreach(var qr in stickerPdf.QrCodes)
+            {
+                qr.X *= RealWordlIncrementFactor;
+                qr.Y *= RealWordlIncrementFactor;
+                
+                qr.Width *= RealWordlIncrementFactor;
+                qr.Height *= RealWordlIncrementFactor;
+            }
+
+            foreach (var str in stickerPdf.PdfStrings)
+            {
+                str.X *= RealWordlIncrementFactor;
+                str.Y *= RealWordlIncrementFactor;
+                str.FontSize *= RealWordlIncrementFactor;
+            }
+        }
+
 
         private static (List<PdfString>, List<QrCode>) GetPdfData(string gameCode, int numberUntil)
         {
