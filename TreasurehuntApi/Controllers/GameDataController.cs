@@ -49,5 +49,20 @@ namespace TreasurehuntApi.Controllers
             return Ok(gameData);
             ;
         }
+
+        [HttpGet]
+        [Route("pdfData")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Load all games data from in memory", typeof(QrCodePdf))]
+        public IActionResult GetPdfData([FromQuery] string gameCode, [FromQuery] int numberUntil)
+        {
+            //var user = AuthLib.GetLoggedInUser(Request, UserRoles.SuperAdmin);
+
+            //if (user == null) { return Unauthorized(); }
+            
+            var qrCodePdfData = QRCodeGeneratorService.GetQrCodesPdfData(gameCode, numberUntil);
+
+            return Ok(qrCodePdfData);
+            ;
+        }
     }
 }
