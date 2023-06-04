@@ -26,7 +26,7 @@ namespace TreasurehuntApi.Controllers
         public IActionResult Get([FromRoute] string gameCode, [FromRoute]int scannedCode)
         {
             var user = AuthLib.GetLoggedInUser(Request, UserRoles.Team);
-            if (user == null) { return HtmlResponseGeneratorService.GetHtmlPage("Unauthorized"); }
+            if (user == null) { return HtmlResponseGeneratorService.GetHtmlPage("Unauthorized", "Please contact Admin (Mr. Prashant)"); }
 
             // Run the state machine
             var stateRunResponse = _stateMachineService.Run(user.FullName, gameCode, scannedCode);
