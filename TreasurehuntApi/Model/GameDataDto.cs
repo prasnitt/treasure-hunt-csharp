@@ -55,13 +55,13 @@ namespace TreasurehuntApi.Model
         // Code Index for teamA at 0th column, and 2nd column for teamB
         public static int CodeIndexInRow(string teamName)
         {
-            return (UserData.TeamAName == teamName) ? 0 : 2;
+            return (UserData.TeamAName == teamName) ? 0 : 3;
         }
 
         // InstructionUrl Index for teamA at 0th column, and 2nd column for teamB
         public static int InstructionsUrlIndexInRow(string teamName)
         {
-            return (UserData.TeamAName == teamName) ? 1 : 3;
+            return (UserData.TeamAName == teamName) ? 1 : 4;
         }
     }
 }

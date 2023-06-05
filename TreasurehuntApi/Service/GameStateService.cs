@@ -153,6 +153,18 @@ namespace TreasurehuntApi.Service
                 checkPointIndex -= 1;
             }
 
+            // While Calculating Instructions, we will be using next row data
+            if (!isCode)
+            {
+                checkPointIndex += 1;
+
+                // Check if this is the last data point (no next instruction)
+                if (gameData.Data.Count <= checkPointIndex)
+                {
+                    return (null, null);
+                }
+            }
+
             var row = gameData.Data[checkPointIndex];
 
             int columnIndex;
