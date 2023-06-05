@@ -8,6 +8,12 @@ namespace TreasurehuntApi.Data
         public const string TeamAName = "TeamA";
         public const string TeamBName = "TeamB";
 
+        public static List<string> TeamNames =  new()
+        {
+            TeamAName,
+            TeamBName,
+        };
+
 
         public static class UserRoles
         {

@@ -14,9 +14,11 @@ namespace TreasurehuntApi.Model
         public int CurCheckPointIndex { get; set; }
 
         public List<List<int>>  ScoreTransaction { get; set; }
+        public List<string> TeamMemberNames { get; set; }
 
         public TeamWiseGameStateDto(int totalNumberOfCheckPoints) 
         {
+            TeamMemberNames = new List<string>();
             ScoreTransaction = new List<List<int>>();
 
             for (int i = 0; i < totalNumberOfCheckPoints; i++)

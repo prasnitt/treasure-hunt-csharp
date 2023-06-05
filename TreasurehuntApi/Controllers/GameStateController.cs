@@ -30,11 +30,6 @@ namespace TreasurehuntApi.Controllers
         public IActionResult Get()
         {
             var gameState = _gameStateService.GetCurrentGameState();
-            if (gameState == null)
-            {
-                gameState = new GameStateDto();
-            }
-
             return Ok(gameState);
         }
 
@@ -69,6 +64,21 @@ namespace TreasurehuntApi.Controllers
 
             _gameStateService.ResetCurrentGameState();
             return Ok();
+        }
+
+
+        [HttpPost]
+        [Route("TeamMemberNames")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Is successful", typeof(TeamMembersNameDto))]
+        public IActionResult PostKidsName([FromQuery] string teamName, [FromBody] List<string> teamMemberNames)
+        {
+            var user = AuthLib.GetLoggedInUser(Request, UserRoles.SuperAdmin);
+
+            if (user == null) { return Unauthorized(); }
+
+            var (error, teamMembersData) = _gameStateService.UpdateTeamMemberNames(teamName, teamMemberNames);
+            if (error != null ) { return BadRequest(error); }
+            return Ok(teamMembersData);
         }
     }
 }
