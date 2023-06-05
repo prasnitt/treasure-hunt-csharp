@@ -87,8 +87,16 @@ namespace TreasurehuntApi.Service
                 state = UpdateStateOnSuccessfulCodeMatch(teamName, state);
                 ret.IsSuccessfulScan = true;
 
+                // Check game is over
+                if (state.IsGameOver)
+                {
+                    ret.IsGameOver = true;
+                    return ret;
+                }
+
                 // Check if team has finished
                 teamState = state.TeamWiseGameState[teamName];
+
                 if (teamState.FinishedAt != null)
                 {
                     ret.IsCurrentTeamFinished = true;
