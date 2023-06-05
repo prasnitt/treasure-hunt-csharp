@@ -31,7 +31,7 @@ namespace TreasurehuntApi.Service
         //         1.a. If the last code within 2 minutes. No update
         //         1.b. Else -1
         //      2. Keep for same state
-        public StateRunReturnDto Run(string teamName,string gameCode, int scanCode)
+        public StateRunReturnDto Run(string teamName, string gameCode, int scanCode)
         {
             var ret = new StateRunReturnDto();
             var state = _gameStateService.GetCurrentGameState();
@@ -44,7 +44,7 @@ namespace TreasurehuntApi.Service
 
             ret.IsGameStarted = true;
 
-            // If Game has over, means both team are finised
+            // If Game has over, means both team are finished
             if (state.IsGameOver)
             {
                 ret.IsGameOver = true;
@@ -77,8 +77,17 @@ namespace TreasurehuntApi.Service
                 return ret;
             }
 
-            bool isGameCodeMatch = (gameData.Code == gameCode);
-
+            bool isGameCodeMatch = false;
+            // At start the game code should be same as team name
+            if (teamState.CurCheckPointIndex == 0)
+            {
+                isGameCodeMatch = (gameCode == teamName);
+            } 
+            else 
+            {
+                isGameCodeMatch = (gameData.Code == gameCode);
+             }
+            
             if (expectedCode == scanCode && isGameCodeMatch)
             {
                 // Get url Instructions for next checkpoint
@@ -87,8 +96,16 @@ namespace TreasurehuntApi.Service
                 state = UpdateStateOnSuccessfulCodeMatch(teamName, state);
                 ret.IsSuccessfulScan = true;
 
+                // Check game is over
+                if (state.IsGameOver)
+                {
+                    ret.IsGameOver = true;
+                    return ret;
+                }
+
                 // Check if team has finished
                 teamState = state.TeamWiseGameState[teamName];
+
                 if (teamState.FinishedAt != null)
                 {
                     ret.IsCurrentTeamFinished = true;
