@@ -3,10 +3,12 @@
 public class StartStopService : IHostedService
 {
     private readonly GameDataService _gameDataService;
+    private readonly GameStateService _gameStateService;
 
-    public StartStopService(GameDataService gameDataService)
+    public StartStopService(GameDataService gameDataService, GameStateService gameStateService)
     {
         _gameDataService = gameDataService;
+        _gameStateService = gameStateService;
     }
     public Task StartAsync(CancellationToken cancellationToken)
     {
@@ -28,5 +30,6 @@ public class StartStopService : IHostedService
         // This function will be executed during the initialization of the API
 
         _gameDataService.LoadAllGamesData();
+        _gameStateService.ResetCurrentGameState();
     }
 }

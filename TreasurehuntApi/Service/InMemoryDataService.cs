@@ -10,6 +10,7 @@ namespace TreasurehuntApi.Service
 
         public static string GameDataKey = "GameDataKey";
         public static string GameStateKey = "GameStateKey";
+        public static string TeamMemberNamesKey = "TeamMemberNamesKey";
 
         public InMemoryDataService(IMemoryCache memoryCache)
         {
