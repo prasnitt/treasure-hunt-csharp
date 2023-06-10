@@ -36,7 +36,7 @@ namespace TreasurehuntApi.Service
             var ret = new StateRunReturnDto();
             var state = _gameStateService.GetCurrentGameState();
 
-            if (state == null)
+            if (state == null || state.IsGameStarted == false)
             {
                 ret.IsGameStarted = false;
                 return ret;
